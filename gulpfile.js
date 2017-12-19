@@ -11,7 +11,7 @@ var connect  = require('gulp-connect');
 gulp.task('js', function(){
 	gulp.src('src/js/*.js')
 		.pipe(uglify())
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest('dist/js'))
 		.pipe(connect.reload())
 });
 
@@ -41,6 +41,20 @@ gulp.task('html', function(){
 		.pipe(connect.reload())
 });
 
+// css库
+gulp.task('vendor:css', function(){
+	gulp.src('vendor/css/*.css')
+		.pipe(gulp.dest('dist/css'))
+		.pipe(connect.reload())
+})
+
+// js库
+gulp.task('vendor:js', function(){
+	gulp.src('vendor/js/*.js')
+		.pipe(gulp.dest('dist/js'))
+		.pipe(connect.reload())
+})
+
 // livereload热加载
 gulp.task('connect', function(){
 	connect.server({
@@ -50,11 +64,13 @@ gulp.task('connect', function(){
 });
 
 gulp.task('watch', function () {
-  gulp.watch(['src/js/*.js'], ['js']);
-  gulp.watch(['src/scss/*.scss'], ['sass']);
-  gulp.watch(['src/scss/*.scss'], ['images']);
-  gulp.watch(['src/*.html'], ['html']);
+	gulp.watch(['src/js/*.js'], ['js']);
+	gulp.watch(['src/scss/*.scss'], ['sass']);
+	gulp.watch(['src/images/*'], ['images']);
+	gulp.watch(['src/*.html'], ['html']);
+	gulp.watch(['vendor/css/*.css'], ['vendor:css']);
+	gulp.watch(['vendor/js/*.js'], ['vendor:js']);
 });
 
 // 默认任务
-gulp.task('default', ['connect','watch']);
+gulp.task('default', ['connect','watch','js','sass','images','html','vendor:css','vendor:js']);
